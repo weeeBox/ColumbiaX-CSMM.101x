@@ -2,10 +2,10 @@ from math import inf
 
 
 class Minimax:
-    def __init__(self, state, terminal_test, moves_func, eval_func):
+    def __init__(self, state, terminal_test_func, child_states_func, eval_func):
         self._state = state
-        self._terminal_test = terminal_test
-        self._moves_func = moves_func
+        self._terminal_test_func = terminal_test_func
+        self._child_states_func = child_states_func
         self._eval_func = eval_func
 
     def decision(self):
@@ -13,34 +13,34 @@ class Minimax:
         return move, utility
 
     def _solve(self, state, maximize, alpha, beta):
-        if self._terminal_test(state):
+        if self._terminal_test_func(state):
             return state, self._eval_func(state)
 
-        best_move = None
-        moves = self._moves_func(state)
+        best_child = None
+        child_states = self._child_states_func(state)
         if maximize:
             best_utility = -inf
-            for move in moves:
-                _, utility = self._solve(move, False, alpha, beta)
+            for child in child_states:
+                _, utility = self._solve(child, False, alpha, beta)
                 if utility > best_utility:
                     best_utility = utility
-                    best_move = move
+                    best_child = child
 
-                if utility > beta:
+                if utility >= beta:
                     break
 
                 alpha = max(alpha, utility)
         else:
             best_utility = inf
-            for move in moves:
-                _, utility = self._solve(move, True, alpha, beta)
+            for child in child_states:
+                _, utility = self._solve(child, True, alpha, beta)
                 if utility < best_utility:
                     best_utility = utility
-                    best_move = move
+                    best_child = child
 
-                if utility < alpha:
+                if utility <= alpha:
                     break
 
                 beta = min(beta, utility)
 
-        return best_move, best_utility
+        return best_child, best_utility

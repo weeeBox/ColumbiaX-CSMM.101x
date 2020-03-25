@@ -61,8 +61,8 @@ def eval(node):
 
 def create_minimax(node, terminal_test_func=None, moves_func=None, eval_func=None):
     return Minimax(state=node,
-                   terminal_test=terminal_test_func or terminal_test,
-                   moves_func=moves_func or moves,
+                   terminal_test_func=terminal_test_func or terminal_test,
+                   child_states_func=moves_func or moves,
                    eval_func=eval_func or eval)
 
 
