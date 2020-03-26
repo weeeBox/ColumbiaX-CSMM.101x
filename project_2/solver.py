@@ -3,6 +3,7 @@ from typing import List, Tuple
 
 from eval_function import EvalFunction
 from Grid import Grid, vecIndex as MOVE_DIRS
+from grid_helpers import clone_grid
 from minimax import Minimax
 
 
@@ -27,7 +28,7 @@ class State:
         availableMoves = []
 
         for move in MOVE_DIRS:
-            clone = grid.clone()
+            clone = clone_grid(grid)  # since deepcopy is slow
             if clone.move(move):
                 availableMoves.append((clone, move))
 
@@ -38,7 +39,7 @@ class Solver:
     def __init__(self, grid: Grid, eval_func: EvalFunction, time_limit: float = 0.2):
         self._grid = grid
         self._eval_func = eval_func
-        self._end_time = time.clock() + time_limit
+        self._end_time = time.time() + time_limit
 
     def get_move(self):
         depth = 4
@@ -64,7 +65,7 @@ class Solver:
         end_time = self._end_time
 
         def terminal_test(state):
-            if time.clock() >= end_time:
+            if time.time() >= end_time:
                 raise TimeLimitError
 
             return state.depth >= max_depth
