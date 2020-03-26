@@ -1,7 +1,7 @@
 import time
-from math import log2
 from typing import List, Tuple
 
+from eval_function import EvalFunction
 from Grid import Grid, vecIndex as MOVE_DIRS
 from minimax import Minimax
 
@@ -15,11 +15,12 @@ class State:
         self.depth = depth
         self.move = move
         self._grid = grid
-        self._score = self._calc_score(grid)
+
+    def get_grid(self):
+        return self._grid
 
     def get_available_states(self) -> List['State']:
-        children = [State(grid, move, self.depth + 1) for grid, move in self._get_available_moves(self._grid)]
-        return sorted(children, key=lambda x: x.get_score())
+        return [State(grid, move, self.depth + 1) for grid, move in self._get_available_moves(self._grid)]
 
     @staticmethod
     def _get_available_moves(grid) -> List[Tuple[Grid, int]]:
@@ -32,21 +33,15 @@ class State:
 
         return availableMoves
 
-    def get_score(self):
-        return self._score
-
-    @staticmethod
-    def _calc_score(grid) -> float:
-        return log2(grid.getMaxTile()) + len(grid.getAvailableCells()) / 16
-
 
 class Solver:
-    def __init__(self, grid, time_limit=0.2):
+    def __init__(self, grid: Grid, eval_func: EvalFunction, time_limit: float = 0.2):
         self._grid = grid
+        self._eval_func = eval_func
         self._end_time = time.clock() + time_limit
 
     def get_move(self):
-        depth = 2
+        depth = 4
         best_child = self._run_minimax(depth)
         while True:
             try:
@@ -76,10 +71,8 @@ class Solver:
 
         return terminal_test
 
-    @staticmethod
-    def _child_states(state):
-        return state.get_available_states()
+    def _child_states(self, state: State) -> List[State]:
+        return sorted(state.get_available_states(), key=self._eval)
 
-    @staticmethod
-    def _eval(state):
-        return state.get_score()
+    def _eval(self, state: State) -> float:
+        return self._eval_func.calculate(state.get_grid())
