@@ -216,15 +216,14 @@ class PriorityDict:
 ### Students need to change the method to have the corresponding parameters
 
 def write_output(result):
-    f = open('output.txt', 'w')
-    f.write(f"path_to_goal: [{','.join(result.path)}]\n")
-    f.write(f"cost_of_path: {result.cost_of_path}\n")
-    f.write(f"nodes_expanded: {result.nodes_expanded}\n")
-    f.write(f"search_depth: {result.search_depth}\n")
-    f.write(f"max_search_depth: {result.search_depth_max}\n")
-    f.write(f"running_time: 0\n")
-    f.write(f"max_ram_usage: 0")
-    f.close()
+    with open('output.txt', 'w') as f:
+        f.write(f"path_to_goal: [{', '.join(result.path)}]\n")
+        f.write(f"cost_of_path: {result.cost_of_path}\n")
+        f.write(f"nodes_expanded: {result.nodes_expanded}\n")
+        f.write(f"search_depth: {result.search_depth}\n")
+        f.write(f"max_search_depth: {result.search_depth_max}\n")
+        f.write(f"running_time: 0\n")
+        f.write(f"max_ram_usage: 0")
 
 
 ### Student Code Goes here
