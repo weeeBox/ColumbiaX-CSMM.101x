@@ -9,38 +9,40 @@ class Minimax:
         self._eval_func = eval_func
 
     def decision(self):
-        move, utility = self._solve(self._state, maximize=True, alpha=-inf, beta=inf)
-        return move, utility
+        return self._maximize(self._state, a=-inf, b=inf)
 
-    def _solve(self, state, maximize, alpha, beta):
+    def _minimize(self, state, a, b):
         if self._terminal_test_func(state):
-            return state, self._eval_func(state)
+            return None, self._eval_func(state)
 
-        best_child = None
-        child_states = self._child_states_func(state)
-        if maximize:
-            best_utility = -inf
-            for child in child_states:
-                _, utility = self._solve(child, False, alpha, beta)
-                if utility > best_utility:
-                    best_utility = utility
-                    best_child = child
+        min_child, min_utility = None, inf
+        for child in self._child_states_func(state):
+            _, utility = self._maximize(child, a, b)
+            if utility < min_utility:
+                min_child, min_utility = child, utility
 
-                if utility >= beta:
-                    break
+            if min_utility <= a:
+                break
 
-                alpha = max(alpha, utility)
-        else:
-            best_utility = inf
-            for child in child_states:
-                _, utility = self._solve(child, True, alpha, beta)
-                if utility < best_utility:
-                    best_utility = utility
-                    best_child = child
+            if min_utility < b:
+                b = min_utility
 
-                if utility <= alpha:
-                    break
+        return min_child, min_utility
 
-                beta = min(beta, utility)
+    def _maximize(self, state, a, b):
+        if self._terminal_test_func(state):
+            return None, self._eval_func(state)
 
-        return best_child, best_utility
+        max_child, max_utility = None, -inf
+        for child in self._child_states_func(state):
+            _, utility = self._minimize(child, a, b)
+            if utility > max_utility:
+                max_child, max_utility = child, utility
+
+            if max_utility >= b:
+                break
+
+            if max_utility > a:
+                a = max_utility
+
+        return max_child, max_utility
