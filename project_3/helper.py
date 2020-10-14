@@ -13,4 +13,7 @@ def read_data(path):
     :return: X, Y where X - training data, Y - labels
     """
     dataset = np.genfromtxt(path, delimiter=',')
-    return dataset[:, :-1], dataset[:, -1]
+    n = dataset.shape[0]
+    X = np.column_stack((dataset[:, :-1], np.ones(shape=(n,))))
+    Y = dataset[:, -1]
+    return X, Y
