@@ -4,14 +4,9 @@ from driver import Driver
 
 
 class MyTestCase(unittest.TestCase):
-    @staticmethod
-    def _read_boards(path):
-        with open(path, 'r') as f:
-            return f.readlines()
-
     def test_solution(self):
         with open('sudokus_start.txt', 'r') as f:
-            initial_boards = f.readlines()
+            initial_boards = f.read().splitlines()
 
         with open('sudokus_finish.txt', 'r') as f:
             for initial_board in initial_boards:
