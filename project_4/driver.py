@@ -1,19 +1,7 @@
 import sys
 
-from ac3_solver import AC3Solver
-from bts_solver import BTSSolver
-
-
-class Driver:
-    def solve(self, initial_board):
-        solver = AC3Solver()
-        solved_board = solver.solve(initial_board)
-        if solved_board:
-            return solved_board, 'AC3'
-        else:
-            solver = BTSSolver()
-            solved_board = solver.solve(initial_board)
-            return solved_board, 'BTS'
+from board import Board
+from solver import Solver
 
 
 def write_solution(board, solver):
@@ -23,6 +11,7 @@ def write_solution(board, solver):
 
 
 if __name__ == '__main__':
-    initial_board = sys.argv[1]
-    solved_board, solver = Driver().solve(initial_board)
-    write_solution(solved_board, solver)
+    initial_board = Board.from_string(sys.argv[1])
+    solved_board, solver = Solver().solve(initial_board)
+    result = solved_board.to_string()
+    write_solution(result, solver)

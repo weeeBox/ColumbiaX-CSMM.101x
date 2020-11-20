@@ -1,5 +1,6 @@
-from solver import Solver
+from csp_solver import CSPSolver
 
 
-class AC3Solver(Solver):
-    pass
+class AC3Solver(CSPSolver):
+    def solve(self, board, csp):
+        pass
