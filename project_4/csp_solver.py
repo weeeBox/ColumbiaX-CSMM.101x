@@ -1,8 +1,12 @@
 class CSP:
-    def __init__(self, select_unassigned_variable, order_domain_values, valid_inference):
-        self.select_unassigned_variable = select_unassigned_variable
-        self.order_domain_values = order_domain_values
-        self.valid_inference = valid_inference
+    def select_unassigned_variable(self, board):
+        raise NotImplementedError('Implement in a subclass')
+
+    def valid_inference(self, var, value):
+        raise NotImplementedError('Implement in a subclass')
+
+    def order_domain_values(self, var, board):
+        raise NotImplementedError('Implement in a subclass')
 
 
 class CSPSolver:

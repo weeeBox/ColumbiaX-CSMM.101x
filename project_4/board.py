@@ -11,12 +11,18 @@ class Board(object):
     def __copy__(self):
         return Board(self._variables.copy())
 
+    def keys(self):
+        return self._variables.keys()
+
     def is_complete(self):
         for key in self._variables:
             if self._variables[key] == '0':
                 return False
 
         return True
+
+    def is_empty(self, key):
+        return self[key] == '0'
 
     def clear(self, key):
         self[key] = '0'

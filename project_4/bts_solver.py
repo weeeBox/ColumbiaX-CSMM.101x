@@ -16,9 +16,10 @@ class BTSSolver(CSPSolver):
         for value in csp.order_domain_values(var, board):
             board[var] = value
             if csp.valid_inference(var, value):
-                result = self._backtrack(board, csp)
-                if result:
-                    return result
+                solved_board = self._backtrack(board, csp)
+                if solved_board:
+                    return solved_board
+
             board.clear(var)
 
         return None
